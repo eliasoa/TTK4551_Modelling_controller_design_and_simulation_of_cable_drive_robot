@@ -1,6 +1,6 @@
 function [G, Gx, Gy, Gphi] = constraintGradient(y,a,b,l)
 % G = gradient(y,a,b) calculates the gradient of the objective function
-% g(l,r,R) = sum_i^m nu^2_i (eq. 4.46 in Pott, p 164) for 4 cables
+% g(l,r,R) = sum_i^m nu^2_i (eq. (4.46) in Pott, p 146) for 4 cables
 % where a is the row vector containg the proximal anchor points
 % and b is the row vector containg the distal anchor points and l is the
 % row vector containg the cable lengths
@@ -13,9 +13,14 @@ function [G, Gx, Gy, Gphi] = constraintGradient(y,a,b,l)
 %
 %   l   =   | l1 ... lm|
 %
+%   y   =   |  x  |
+%           |  y  |
+%           | phi |
+%
 % Author:    Elias Olsen Almenningen
 % Date:      08 Oct 2023
-% Revisions: 2
+% Revisions: 16.10.2023 Fixed error in Gx, from b(2,i)*sin(phi) to
+%                       b(1,i)*sin(phi)
 m = 4;
 r = y(1:2);
 phi = y(3);
@@ -30,9 +35,5 @@ for i = 1:m
                 + (r(2) - a(2,i) + b(2,i)*cos(phi) + b(1,i)*sin(phi))^2 - l(i)^2) ...
                 * 2 * (r(2) - a(2,i) + b(2,i)*cos(phi) + b(1,i)*sin(phi));
     Gphi(i) = 2*(2*(b(2,i)*cos(phi) + b(1,i)*sin(phi))*(a(1,i) - r(1) - b(1,i)*cos(phi) + b(2,i)*sin(phi)) + 2*(b(1,i)*cos(phi) - b(2,i)*sin(phi))*(r(2) - a(2,i) + b(2,i)*cos(phi) + b(1,i)*sin(phi)))*((a(1,i) - r(1) - b(1,i)*cos(phi) + b(2,i)*sin(phi))^2 + (r(2) - a(2,i) + b(2,i)*cos(phi) + b(1,i)*sin(phi))^2 - l(i)^2);
-    
-    % Gx(i) = dgdx(r(1),r(2),a(1,i),a(2,i),b(1,i),b(2,i),phi,l(i));
-    % Gy(i) = dgdy(r(1),r(2),a(1,i),a(2,i),b(1,i),b(2,i),phi,l(i));    
-    % Gphi(i) = dgdphi(r(1),r(2),a(1,i),a(2,i),b(1,i),b(2,i),phi,l(i));
 end
 G = [sum(Gx);sum(Gy);sum(Gphi)];

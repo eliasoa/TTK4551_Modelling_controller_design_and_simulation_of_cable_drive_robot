@@ -1,4 +1,14 @@
-function r0 = InitialPose(l,a, b)
+function r0 = InitialPose(l,a,b)
+% r0 = InitialPose(l,a,b) calculates a initial pose for the 
+% tool centrepoint (TCP) of a Cable-Driven Paralell robot
+% using eq. (4.40) - (4.41) in Pott, p 143
+%
+%
+%
+%
+% Author: Magnus Grøterud
+% Date: Kven kveit
+% Revision:
 
 % Memory Allocation
 r_low = zeros(2,4);
@@ -18,8 +28,8 @@ end
 r_lowMax = max(r_low);
 r_highMin = min(r_high);
 
-[rMax,I_Max] = max(r_lowMax);
-[rMin,I_min] = min(r_highMin);
+[~,I_Max] = max(r_lowMax);
+[~,I_min] = min(r_highMin);
 
 r0 = (r_low(:,I_Max) + r_high(:,I_min))*(0.5);
 
