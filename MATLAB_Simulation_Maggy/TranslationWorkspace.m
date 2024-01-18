@@ -1,13 +1,13 @@
-function TranslationWorkspace(phi_0,a,b, dim, f_min,f_max, w)
+function TranslationWorkspace(phi_0,a,b, f_min,f_max, w, resolution)
 
 % Extract Lengths of the Base
-x_dim = dim(1);
-y_dim = dim(2);
+x_dim = norm(a(:,3) - a(:,2));
+y_dim = norm(a(:,2) - a(:,1));
 
 
 % Grid of the "Base Workspace"
-x_grid = linspace(0, x_dim, 100);
-y_grid = linspace(0, y_dim, 100);
+x_grid = linspace(-x_dim/2, x_dim/2, resolution);
+y_grid = linspace(-y_dim/2, y_dim/2, resolution);
 
 X = length(x_grid);
 Y = length(y_grid);
@@ -43,7 +43,7 @@ ylabel('Y-axis');
 title(['Translation Workspace, with $$\phi _0 = $$ ' num2str(phi_0) ' degrees'], 'Interpreter','latex');
 
 % Optionally, set axis limits based on the matrix size
-axis([0, 1, 0, 1]);
+ axis([-x_dim/2, x_dim/2, -y_dim/2, y_dim/2]);
 
 % % Displaying the matrix where 1s are plotted and adjusting the axes
 % imagesc(y_grid,x_grid, f_positive);
